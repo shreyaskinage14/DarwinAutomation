@@ -9,9 +9,8 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
+import java.util.*;
+
 import org.apache.commons.io.FileUtils;
 import java.util.concurrent.TimeUnit;
 import java.io.*;
@@ -35,6 +34,8 @@ public class Automation {
             } else {
                 System.out.println("Failed to create directory!");
             }
+        } else {
+            System.out.println("Directory already exists!");
         }
     }
 
@@ -44,6 +45,9 @@ public class Automation {
 //        driver.navigate().to("www.google.com");
         driver.get("https://annalectindia.darwinbox.in");
         driver.manage().window().maximize();
+
+        String mainFolder = "C:\\Users\\" + System.getProperty("user.name") +"\\Downloads\\AutomationFolderCreation";
+        revCreateDirectory(mainFolder);
     }
 
     public static void login() throws Exception{
@@ -76,33 +80,44 @@ public class Automation {
         Thread.sleep(20000);
     }
 
-//    public static void close_modal() throws Exception {
-//        Thread.sleep(2000);
-//        boolean submitbuttonPresence = driver.findElement(By.xpath("/html/body/div[2]/div/div[1]/div/form/div/div/div/div[3]/button[1]")).isDisplayed();
-//        if(submitbuttonPresence == true) {
-//            driver.findElement(By.xpath("/html/body/div[2]/div/div[1]/div/form/div/div/div/div[3]/button[1]")).click();
-//        }
-//        Thread.sleep(5000);
-//    }
-
     public static void filter_data() throws Exception {
         driver.findElement(By.xpath("/html/body/div[2]/div/section/div/div[2]/form/button")).click();
-
-//        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-//        LocalDateTime to_date = LocalDateTime.now();
-//        String stringTo_date = dtf.format(to_date);
-//        LocalDateTime from_date = to_date.minusDays(365);
-//        String stringFrom_date = dtf.format(from_date);
-//
-//        System.out.println("To_Date" + stringTo_date);
-//        System.out.println("From_Date" + stringFrom_date);
-//
-//        System.out.println(to_date + " " + from_date);
-
         driver.manage().timeouts().implicitlyWait(40, TimeUnit.SECONDS);
         Thread.sleep(5000);
 
-        driver.findElement(By.xpath("/html/body/div[2]/div/div[4]/div/form/div[1]/div[2]/div[1]/div[1]/span")).click();
+//        to click the clear button
+//        driver.findElement(By.xpath("/html/body/div[2]/div/div[4]/div/form/div[1]/div[2]/div[1]/div[1]/span")).click();
+
+//        Selecting date (i.e. 01-07-2020) from the dropdown to filter the data
+
+//        Opening the calander dropdown
+          driver.findElement(By.id("ReimbAdminFilters_created_from_date")).click();
+          Thread.sleep(1000);
+
+//        Opening the dropdown to select the month
+          driver.findElement(By.xpath("/html/body/div[3]/div/div/select[1]")).click();
+          Thread.sleep(1000);
+
+//        Selecting the month i.e. July Month
+          driver.findElement(By.xpath("/html/body/div[3]/div/div/select[1]/option[7]")).click();
+          Thread.sleep(1000);
+
+//        Opening the dropdown to select the year
+          driver.findElement(By.xpath("/html/body/div[3]/div/div/select[2]")).click();
+          Thread.sleep(1000);
+
+//        Selecting the year i.e. 2020
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        System.out.println(year);
+
+        int difference = year - 2020;
+
+        driver.findElement(By.xpath("/html/body/div[3]/div/div/select[2]/option[" + (11 -  difference) + "]")).click();
+          Thread.sleep(1000);
+
+//        Selecting the date i.e. 01
+          driver.findElement(By.xpath("/html/body/div[3]/table/tbody/tr[1]/td[4]/a")).click();
+          Thread.sleep(1000);
 
         driver.findElement(By.id("apply_filter")).click();
         Thread.sleep(30000);
@@ -115,6 +130,7 @@ public class Automation {
 
         driver.manage().timeouts().implicitlyWait(120, TimeUnit.SECONDS);
         System.out.println(pending_for_processing);
+
         int k = 2;
         for(int i = 1; i <= pending_for_processing; i++) {
             String string_id = "/html/body/div[2]/div/section/div/div[4]/form/div[1]/div/div/table/tbody/tr[" + i +"]/td[2]";
@@ -127,7 +143,7 @@ public class Automation {
             String name = newName.getText();
 
             String folderName = id + "-" + name;
-            String folderPath = "C:\\Users\\Administrator\\Downloads\\AutomationFolderCreation\\" + folderName;
+            String folderPath = "C:\\Users\\" + System.getProperty("user.name") +"\\Downloads\\AutomationFolderCreation\\" + folderName;
             revCreateDirectory(folderPath);
 
             driver.findElement(By.xpath("/html/body/div[2]/div/section/div/div[4]/form/div[1]/div/div/table/tbody/tr[" + i + "]/td[11]/div/div/button")).click();
@@ -137,7 +153,7 @@ public class Automation {
             Thread.sleep(5000);
 
             try {
-                String downloadPath = "C:\\Users\\Administrator\\Downloads";
+                String downloadPath = "C:\\Users\\" + System.getProperty("user.name") + "\\Downloads";
                 File f = new File(downloadPath);
 
                 FilenameFilter filterPDF = new FilenameFilter() {
@@ -219,7 +235,7 @@ public class Automation {
     }
 
     public static void log_file(){
-        File file = new File("C:\\Users\\Administrator\\IdeaProjects\\DarwinAutomation");
+        File file = new File("C:\\Users\\" + System.getProperty("user.name") + "\\IdeaProjects\\DarwinAutomation");
     }
 
     public static void main(String[] args) throws Exception {
