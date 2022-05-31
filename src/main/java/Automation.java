@@ -39,7 +39,7 @@ public class Automation {
     }
 
     public static void launchBrowser() throws Exception {
-        System.setProperty("webdriver.chrome.driver", "C:/Users/Administrator/Downloads/chromedriver_win32/chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "C:\\Automation\\DarwinAutomation\\extLibraries\\chromedriver.exe");
         driver=new ChromeDriver();
 //        driver.navigate().to("www.google.com");
         driver.get("https://annalectindia.darwinbox.in");
