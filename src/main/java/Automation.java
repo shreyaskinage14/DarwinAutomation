@@ -371,7 +371,6 @@ public class Automation {
 
     public static String getEmpId(String name) {
         String[] one = name.split("\\(");
-        System.out.println(one[0]);
         String[] last = one[1].split("\\)");
         return last[0];
     }
