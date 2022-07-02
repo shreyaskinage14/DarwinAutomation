@@ -23,6 +23,7 @@ public class Automation {
     public static WebDriver driver;
     public static Duration waitDuration = Duration.ofSeconds(120);
     public static WebDriverWait wait;
+    public static String chromeD = "C:\\chromedriver.exe";
     public static long pending_for_processing;
     static Logger log = Logger.getLogger(Automation.class);
 
@@ -47,14 +48,14 @@ public class Automation {
     }
 
     public static void launchBrowser() throws Exception {
-        PropertyConfigurator.configure("src/log4j.properties");
-        System.setProperty("webdriver.chrome.driver", "extLibraries/chromedriver.exe");
+        String logFolder = "C:\\logs";
+        revCreateDirectory(logFolder);
+        PropertyConfigurator.configure("ssrc/log4j.properties");
+        System.setProperty("webdriver.chrome.driver", chromeD);
 
         driver=new ChromeDriver();
         wait = new WebDriverWait(driver, waitDuration);
-        String logFolder = "C:\\logs";
-        revCreateDirectory(logFolder);
-//        driver.navigate().to("www.google.com");
+
         driver.get("https://annalectindia.darwinbox.in");
 
         driver.manage().window().maximize();
@@ -80,17 +81,17 @@ public class Automation {
         Thread.sleep(20000);
         driver.findElement(By.xpath("//*[@id=\"form61\"]/div[2]")).click();
         setLog("Okta Code Verified!");
+        Thread.sleep(20000);
+
+//        boolean submitbuttonPresence = driver.findElement(By.xpath("/html/body/div[2]/div/div[1]/div/form/div/div/div/div[3]/button[1]")).isDisplayed();
+//        if(submitbuttonPresence) {
+//            driver.findElement(By.xpath("/html/body/div[2]/div/div[1]/div/form/div/div/div/div[3]/button[1]")).click();
+//            setLog("Modal Closed!");
+//            Thread.sleep(1500);
+//        }
+        driver.findElement(By.tagName("body")).sendKeys(Keys.END);
         Thread.sleep(5000);
-
-        boolean submitbuttonPresence = driver.findElement(By.xpath("/html/body/div[2]/div/div[1]/div/form/div/div/div/div[3]/button[1]")).isDisplayed();
-        if(submitbuttonPresence) {
-            driver.findElement(By.xpath("/html/body/div[2]/div/div[1]/div/form/div/div/div/div[3]/button[1]")).click();
-            setLog("Modal Closed!");
-            Thread.sleep(1500);
-        }
-        Thread.sleep(3000);
-
-        driver.findElement(By.xpath("/html/body/div[2]/div/nav/div[1]/div[2]/div[2]/div/a/div")).click();
+        driver.findElement(By.xpath("/html/body/div[2]/div/nav/div[1]/div[2]/div[2]/div/a")).click();
         setLog("Navigated to Admin access module");
         setLog("Redirecting to Travel & Expense module");
     }
@@ -115,7 +116,7 @@ public class Automation {
 //        Selecting date (i.e. 01-07-2020) from the dropdown to filter the data
 
 //        Opening the calander dropdown
-          wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("ReimbAdminFilters_created_from_date"))).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("ReimbAdminFilters_created_from_date"))).click();
 //          Thread.sleep(1000);
 
 //        Opening the dropdown to select the month
@@ -214,6 +215,7 @@ public class Automation {
             setLog("Folder Created for " + folderName);
 
             driver.findElement(By.xpath("/html/body/div[2]/div/section/div/div[4]/form/div[1]/div/div/table/tbody/tr[" + i + "]/td[11]/div/div/button")).click();
+            Thread.sleep(1000);
             driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 
             driver.findElement(By.xpath("/html/body/div[2]/div/section/div/div[4]/form/div[1]/div/div/table/tbody/tr[" + i + "]/td[11]/div/ul/li[1]/a")).click();
@@ -251,6 +253,7 @@ public class Automation {
                 }
 
                 driver.findElement(By.xpath("/html/body/div[2]/div/section/div/div[4]/form/div[1]/div/div/table/tbody/tr["+ i +"]/td[11]/div/div/button")).click();
+                Thread.sleep(1000);
                 driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 
                 driver.findElement(By.xpath("/html/body/div[2]/div/section/div/div[4]/form/div[1]/div/div/table/tbody/tr["+ i +"]/td[11]/div/ul/li[2]/a")).click();
@@ -371,6 +374,7 @@ public class Automation {
 
     public static String getEmpId(String name) {
         String[] one = name.split("\\(");
+        System.out.println(one[0]);
         String[] last = one[1].split("\\)");
         return last[0];
     }
