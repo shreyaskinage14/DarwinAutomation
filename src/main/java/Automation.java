@@ -70,13 +70,15 @@ public class Automation {
         setLog("Automation Started on");
         String mainFolder = "C:\\Users\\" + System.getProperty("user.name") +"\\Downloads\\AutomationFolderCreation";
         revCreateDirectory(mainFolder);
+        String nestedFolder = "C:\\Users\\" + System.getProperty("user.name") +"\\Downloads\\AutomationFolderCreation\\" + java.time.LocalDate.now();
+        revCreateDirectory(nestedFolder);
         setLog("AutomationFolderCreation folder created at Downloads location");
     }
 
     public static void login() throws Exception{
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("okta-signin-username"))).sendKeys("ajay.kinage@omnicommediagroup.com");
         setLog("Username entered");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("okta-signin-password"))).sendKeys("OmniMay@2022");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("okta-signin-password"))).sendKeys("OmniJuly@2022");
         setLog("Password entered");
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("okta-signin-submit"))).click();
         setLog("Submitted");
@@ -88,17 +90,18 @@ public class Automation {
         setLog("Okta Code Verified!");
         Thread.sleep(15000);
 
-//        boolean submitbuttonPresence = driver.findElement(By.xpath("/html/body/div[2]/div/div[1]/div/form/div/div/div/div[3]/button[1]")).isDisplayed();
-//        if(submitbuttonPresence) {
-//            driver.findElement(By.xpath("/html/body/div[2]/div/div[1]/div/form/div/div/div/div[3]/button[1]")).click();
-//            setLog("Modal Closed!");
-//            Thread.sleep(1500);
-//        }
+
         
 //        /html/body/div[1]/div/div/div[1]/header/div[1]/div[2]/a
         
         driver.get("https://annalectindia.darwinbox.in");
         Thread.sleep(5000);
+        boolean submitbuttonPresence = driver.findElement(By.xpath("/html/body/div[2]/div/div[1]/div/form/div/div/div/div[3]/button[1]")).isDisplayed();
+        if(submitbuttonPresence) {
+            driver.findElement(By.xpath("/html/body/div[2]/div/div[1]/div/form/div/div/div/div[3]/button[1]")).click();
+            setLog("Modal Closed!");
+            Thread.sleep(1500);
+        }
         driver.findElement(By.tagName("body")).sendKeys(Keys.END);
         Thread.sleep(5000);
         driver.findElement(By.xpath("/html/body/div[2]/div/nav/div[1]/div[2]/div[2]/div/a")).click();
@@ -134,8 +137,7 @@ public class Automation {
 //          Thread.sleep(1000);
 
 //        Selecting the month i.e. July Month
-        driver.findElement(By.xpath("/html/body/div[3]/div/div/select[1]/option[6]")).click();
-
+        driver.findElement(By.xpath("/html/body/div[3]/div/div/select[1]/option[1]")).click();
 //          Thread.sleep(1000);
 
 //        Opening the dropdown to select the year
@@ -152,7 +154,7 @@ public class Automation {
         //          Thread.sleep(1000);
 
 //        Selecting the date i.e. 01
-        driver.findElement(By.xpath("/html/body/div[3]/table/tbody/tr[2]/td[4]/a")).click();
+        driver.findElement(By.xpath("/html/body/div[3]/table/tbody/tr[1]/td[7]/a")).click();
 //        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("ReimbAdminFilters_created_to_date"))).click();
 //        
 //        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[3]/div/div/select[1]"))).click();
@@ -205,7 +207,7 @@ public class Automation {
             String name = newName.getText();
 
             // to get the employee id
-            String empId = getEmpId(name);
+            String empId = getEmpId(name, false);
             String[] properName = name.split("\\(");
 
             // to get the title
@@ -234,8 +236,8 @@ public class Automation {
 
 //            excelReport(empId, properName[0], id, title, name, claimedDate, claimedAmount, approvedAmount, approvedBy, approvedOn);
 
-            String folderName = id + "-" + name;
-            String folderPath = "C:\\Users\\" + System.getProperty("user.name") +"\\Downloads\\AutomationFolderCreation\\" + folderName;
+            String folderName = getEmpId(name, true) + "-" + getEmpId(name, false) + "-" + id;
+            String folderPath = "C:\\Users\\" + System.getProperty("user.name") +"\\Downloads\\AutomationFolderCreation\\" + java.time.LocalDate.now() + "\\" + folderName;
             revCreateDirectory(folderPath);
             setLog("Folder Created for " + folderName);
 
@@ -404,11 +406,11 @@ public class Automation {
 //        }
 //    }
 
-    public static String getEmpId(String name) {
+    public static String getEmpId(String name, boolean idName) {
         String[] one = name.split("\\(");
         System.out.println(one[0]);
         String[] last = one[1].split("\\)");
-        return last[0];
+        return idName ? last[0] : one[0];
     }
 
     public static void main(String[] args) throws Exception {
