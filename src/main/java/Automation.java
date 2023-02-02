@@ -23,9 +23,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 public class Automation {
     public static WebDriver driver;
     public static Duration waitDuration = Duration.ofSeconds(120);
-    public static WebDriverWait wait;
-    
-    public static String chromeD = "C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\chromedriver.exe";
+    public static String chromeD = "C:\\chromedriver.exe";
     public static long pending_for_processing;
     static Logger log = Logger.getLogger(Automation.class);
     public static JavascriptExecutor js;
@@ -53,14 +51,14 @@ public class Automation {
     public static void launchBrowser() throws Exception {
         String logFolder = "C:\\logs";
         revCreateDirectory(logFolder);
-        PropertyConfigurator.configure("ssrc/log4j.properties");
+        PropertyConfigurator.configure("src/log4j.properties");
         System.setProperty("webdriver.chrome.driver", chromeD);
 
         driver=new ChromeDriver();
         wait = new WebDriverWait(driver, waitDuration);
 
         driver.get("https://annalectindia.darwinbox.in");
-        
+
         js = (JavascriptExecutor) driver;
 
         driver.manage().window().maximize();
@@ -78,7 +76,7 @@ public class Automation {
     public static void login() throws Exception{
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("okta-signin-username"))).sendKeys("ajay.kinage@omnicommediagroup.com");
         setLog("Username entered");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("okta-signin-password"))).sendKeys("OmniJuly@2022");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("okta-signin-password"))).sendKeys("@mniJan@2023");
         setLog("Password entered");
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("okta-signin-submit"))).click();
         setLog("Submitted");
@@ -89,11 +87,8 @@ public class Automation {
         driver.findElement(By.xpath("//*[@id=\"form61\"]/div[2]")).click();
         setLog("Okta Code Verified!");
         Thread.sleep(15000);
-
-
-        
 //        /html/body/div[1]/div/div/div[1]/header/div[1]/div[2]/a
-        
+
         driver.get("https://annalectindia.darwinbox.in");
         Thread.sleep(5000);
         boolean submitbuttonPresence = driver.findElement(By.xpath("/html/body/div[2]/div/div[1]/div/form/div/div/div/div[3]/button[1]")).isDisplayed();
@@ -113,7 +108,7 @@ public class Automation {
 //        Thread.sleep(2000);`
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[2]/div/section/div/div[4]/div[1]/ul/li[2]/a"))).click();
         setLog("Selecting Pending for processing Tab");
-        Thread.sleep(10000);
+        Thread.sleep(15000);
     }
 
     public static void filter_data() throws Exception {
@@ -142,6 +137,8 @@ public class Automation {
 
 //        Opening the dropdown to select the year
 //        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[3]/div/div/select[2]"))).click();
+//        /html/body/div[3]/div/div/select[2]
+        //        /html/body/div[3]/div/div/select[2]/option[11]
 //          Thread.sleep(1000);
 
 //        Selecting the year i.e. 2020
@@ -150,17 +147,17 @@ public class Automation {
 
 
 //        driver.findElement(By.xpath("/html/body/div[3]/div/div/select[2]/option[" + (11 -  difference) + "]")).click();
-//        driver.findElement(By.xpath("/html/body/div[3]/div/div/select[2]/option[]")).click();
-        //          Thread.sleep(1000);
+        driver.findElement(By.xpath("/html/body/div[3]/div/div/select[2]/option[10]")).click();
+//                  Thread.sleep(1000);
 
 //        Selecting the date i.e. 01
         driver.findElement(By.xpath("/html/body/div[3]/table/tbody/tr[1]/td[7]/a")).click();
 //        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("ReimbAdminFilters_created_to_date"))).click();
-//        
+
 //        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[3]/div/div/select[1]"))).click();
-//        
+
 //        driver.findElement(By.xpath("/html/body/div[3]/div/div/select[1]/option[7]")).click();
-//        
+//
 //        driver.findElement(By.xpath("/html/body/div[3]/table/tbody/tr[2]/td[5]/a")).click();
 
 //          Thread.sleep(1000);
@@ -172,13 +169,13 @@ public class Automation {
     }
 
     public static void download_pending_processes() throws Exception {
-    	
-    	wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[2]/div/section/div/div[4]/form/div[1]/div/div/table/thead/tr[1]/th[6]/a"))).click();  	
-    	Thread.sleep(3000);
+        Thread.sleep(5000);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[2]/div/section/div/div[4]/form/div[1]/div/div/table/thead/tr[1]/th[6]/a"))).click();
+        Thread.sleep(3000);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[2]/div/section/div/div[2]/form/button")));
-        
-        
-        
+
+
+
         WebElement p = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[2]/div/section/div/div[4]/div[1]/ul/li[2]/a/span")));
         String process = p.getText();
         pending_for_processing = Integer.parseInt(process);
@@ -283,7 +280,7 @@ public class Automation {
                 driver.findElement(By.xpath("/html/body/div[2]/div/section/div/div[4]/form/div[1]/div/div/table/tbody/tr[" + i +"]/td[11]/div/div/button")).click();
                 Thread.sleep(2000);
                 driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-                
+
                 driver.findElement(By.xpath("/html/body/div[2]/div/section/div/div[4]/form/div[1]/div/div/table/tbody/tr[" + i + "]/td[11]/div/div/ul/li[2]/a")).click();
                 Thread.sleep(2000);
                 driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
@@ -321,10 +318,10 @@ public class Automation {
                 setLog("Error moving files: " + e.getMessage());
                 System.err.println(e.getMessage());
             }
-            
-            if(i >= 3) {
-            	js.executeScript("window.scrollBy(0,100)", "");
-            	Thread.sleep(5000);
+
+            if(i >= 2) {
+                js.executeScript("window.scrollBy(0,120)", "");
+                Thread.sleep(5000);
             }
             if(i % 10 == 0) {
                 if(k > 6) {
@@ -422,5 +419,7 @@ public class Automation {
         auto.filter_data();
         auto.download_pending_processes();
     }
+    public static WebDriverWait wait;
+
 
 }
