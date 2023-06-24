@@ -3,10 +3,13 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.concurrent.TimeUnit;
@@ -54,7 +57,10 @@ public class Automation {
         PropertyConfigurator.configure("src/log4j.properties");
         System.setProperty("webdriver.chrome.driver", chromeD);
 
-        driver=new ChromeDriver();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--remote-allow-origins=*");
+
+        driver = new ChromeDriver(options);
         wait = new WebDriverWait(driver, waitDuration);
 
         driver.get("https://annalectindia.darwinbox.in");
@@ -68,7 +74,7 @@ public class Automation {
         setLog("Automation Started on");
         String mainFolder = "C:\\Users\\" + System.getProperty("user.name") +"\\Downloads\\AutomationFolderCreation";
         revCreateDirectory(mainFolder);
-        String nestedFolder = "C:\\Users\\" + System.getProperty("user.name") +"\\Downloads\\AutomationFolderCreation\\" + java.time.LocalDate.now();
+        String nestedFolder = "C:\\Users\\" + System.getProperty("user.name") +"\\Downloads\\AutomationFolderCreation\\" + LocalDate.now();
         revCreateDirectory(nestedFolder);
         setLog("AutomationFolderCreation folder created at Downloads location");
     }
@@ -131,7 +137,7 @@ public class Automation {
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[3]/div/div/select[1]"))).click();
 //          Thread.sleep(1000);
 
-//        Selecting the month i.e. July Month
+//        Selecting the month i.e. Jan Month
         driver.findElement(By.xpath("/html/body/div[3]/div/div/select[1]/option[1]")).click();
 //          Thread.sleep(1000);
 
@@ -147,11 +153,12 @@ public class Automation {
 
 
 //        driver.findElement(By.xpath("/html/body/div[3]/div/div/select[2]/option[" + (11 -  difference) + "]")).click();
-        driver.findElement(By.xpath("/html/body/div[3]/div/div/select[2]/option[10]")).click();
+//        driver.findElement(By.xpath("/html/body/div[3]/div/div/select[2]/option[12]")).click();
 //                  Thread.sleep(1000);
 
 //        Selecting the date i.e. 01
-        driver.findElement(By.xpath("/html/body/div[3]/table/tbody/tr[1]/td[7]/a")).click();
+        driver.findElement(By.xpath("/html/body/div[3]/table/tbody/tr[1]/td[1]/a")).click();
+//        /html/body/div[3]/table/tbody/tr[1]/td[1]/a
 //        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("ReimbAdminFilters_created_to_date"))).click();
 
 //        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[3]/div/div/select[1]"))).click();
@@ -170,6 +177,7 @@ public class Automation {
 
     public static void download_pending_processes() throws Exception {
         Thread.sleep(5000);
+//        //*[@id="expenses-data"]/tr[1]/td[11]/div/div[2]/button
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[2]/div/section/div/div[4]/form/div[1]/div/div/table/thead/tr[1]/th[6]/a"))).click();
         Thread.sleep(3000);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[2]/div/section/div/div[2]/form/button")));
@@ -182,10 +190,12 @@ public class Automation {
 
         driver.manage().timeouts().implicitlyWait(120, TimeUnit.SECONDS);
         System.out.println(pending_for_processing);
-
+///html/body/div[2]/div/section/div/div[4]/form/div[1]/div/div/table/tbody/tr[1]/td[11]/div/div[2]/button
+///html/body/div[2]/div/section/div/div[4]/form/div[1]/div/div/table/tbody/tr[2]/td[11]/div/div[2]/button
         int k = 2;
         int scroll = 0;
         for(int i = 1; i <= pending_for_processing; i++) {
+//          /html/body/div[2]/div/section/div/div[4]/form/div[1]/div/div/table/tbody/tr[1]/td[2]
             String string_id = "/html/body/div[2]/div/section/div/div[4]/form/div[1]/div/div/table/tbody/tr[" + i +"]/td[2]";
             String string_name = "/html/body/div[2]/div/section/div/div[4]/form/div[1]/div/div/table/tbody/tr[" + i + "]/td[5]/a[2]";
             String string_title = "/html/body/div[2]/div/section/div/div[4]/form/div[1]/div/div/table/tbody/tr[" + i + "]/td[4]/a";
